@@ -57,7 +57,7 @@ Check the .ipynb notebook for details [CuiFearn2018_CNN/Cui_CNN.ipynb](/notebook
 
 <br>
 
-## TUTORIALS
+## TUTORIALS and PUBLICATIONS
 ### SVM hyperparameters optimization, Kaneko and Funatsu 2015
 
 In this notebook I'll show one way of performing hyperparameter optimization for Support Vector Machines (with rbf kernel) models when applied to regression problems. From experience I can say that the method works relatively well (depending on the data set of course) when compared to classical grid search and random grid search methods.
@@ -77,10 +77,24 @@ In Kaneko and Funatsu 2015, the authors show that a good estimate of parameter  
 
 Check the .ipynb notebook for details [KanekoFunatsu2015_SVROpt/SVM_optimization.ipynb](/notebooks/KanekoFunatsu2015_SVROpt/SVM_optimization.ipynb).
 
-### Tutorial on automated optimization of deep spectral modelling for regression and classification (NEW!)
+### Tutorial on automated optimization of deep spectral modelling for regression and classification (update .v2)
 In this tutorial we show how to implement and optimized the hyperparameteres of a deep learning model (CNN) using advanced Baeysian Optimization techniques. The models are implemented in Tensorflow 2 and python and are optimized using the implementations of TPE (Tree-structured Parzen Estimator) and Hyperband algorithms available in [Optuna](https://optuna.org/). The repository files contain notebooks that are complementary to the official publication <b>*Passos, D., Mishra, P., "A tutorial on automatic hyperparameter tuning of deep spectral modelling for regression and classification tasks"*, Chemometrics and Intelligent Laboratory Systems, Volume 223, 15 April 2022, 104520. [Open access Article](https://doi.org/10.1016/j.chemolab.2022.104520).</b> The tutorial files are self-contained but some theoretical concepts that are explained in the published manuscript might be useful to read. You are free to use the contained information and adapt the accompanying code to your own work, but if you do so, we appreciate that you cite the above mentioned paper. Enjoy...
 
 Check [the tutorial files here](https://github.com/dario-passos/DeepLearning_for_VIS-NIR_Spectra/tree/master/notebooks/Tutorial_on_DL_optimization)
 
+
+> __March 2023 update__  
+The tutorial files were updated to work with newer versions of Optuna (3.0.5), Tensorflow (2.9.1 and up) and python (3.10.5). The main changes come from the Optuna library. All modifications are implemented into 2 new notebooks versions (that end with _v2) and are highlighted in red text, describing what has changed.
+
+> __May 2023 update__
+BUG UPDATE!!
+**Bug detected in the notebook: "2) optimization_tutorial_classification_v2.ipynb". I detected a typo in the function <code>create_model()</code> defined in section 5.1). The range for the number of DENSE layers starts at index=1 (it should start at index=0). The loop for the hyperparameter optimization (HPO) generated NUM_FC_UNITS and DROPOUT_RATE lists that start at index=0. This means that the HP in these lists that have index=0 were never considered by the CNN during the optimization because only indices>0 are used. In practice this means that when we instantiate a new model, i.e. <code>create_model(num_FC_layers, num_FC_units, filter_size, DROPOUT, reg_beta)</code> with <code>(5, [360,350,132,442,334], 3, [0.555,0.165,0.13,0.46,0.085], 1e-05)</code> the first values for lists num_FC_units (i.e. 360) and DROPOUT (i.e. 0.555) are not considered by the model. We can confirm this in section 6.1. If we change the first items on these lists when we define "model454" the prediction results is exactly the same, i.e. the CNN is not using those hyperparameters because the corresponding DENSE_0/DROPOUT_0 layer pair was never created in the first place.**
+**In terms of practical effects this means that the reported model complexity is higher than the real model. Our conclusion that the optimized model <code>model454 = create_model(5, [360,350,132,442,334], 3, [0.555,0.165,0.13,0.46,0.085], 1e-05)</code> had 5 optimized DENSE/DROPOUT layers means that in fact it had 4 optimized DENSE/DROPOUT layers with [350,132,442,334] / [0.165,0.13,0.46,0.085] respectively. That being said, the optimization pipeline suggested here remains valid and a useful way of dealing with CNN HPO for spectral analysis. This notebook will remain as is for the mean time for warning purposes and will be completely substituted with a corrected version after some time. Do a local search for #BUG keyword/comments in the present code to know where things will change**
+
+
+### Deep Tutti Frutti: Exploring CNN architectures for dry matter prediction in fruit from multi-fruit near-infrared spectra
+The accompaning notebooks of our work: [Passos, D., Mishra, P.,"Deep Tutti Frutti: exploring CNN architectures for dry matter prediction in fruit from multi-fruit near-infrared spectra"](https://doi.org/10.1016/j.chemolab.2023.105023) (available in open access). This is a follow-up of the CNN HPO methodology developed and presented in the previous tutorial specifically aimed at dry matter prediction in a multi-fruit data set.
+
+Check the files here: [Deep Tutti Frutti I notebooks](https://github.com/dario-passos/DeepLearning_for_VIS-NIR_Spectra/tree/master/notebooks/Deep-Tuttifrutti_I) 
 
 ### more in the near future...
